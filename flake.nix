@@ -12,7 +12,7 @@
     {
       # export modules under self.nixosModules
       nixosModules = nixpkgs.lib.genAttrs [ "pterodactyl" ] (module: 
-        import ./modules/${module}.nix { inherit self nixpkgs; }
+        module: import ./modules/${module}.nix { flake = self; }
       );
 
       # export packages for each system
@@ -21,7 +21,7 @@
           pkgs = import nixpkgs { inherit system; };
         in
         nixpkgs.lib.genAttrs [ "pterodactyl" "php" "wings" ] (pkg:
-          import ./packages/${pkg}.nix { inherit pkgs; }
+                  package: import ./packages/${package}.nix { pkgs = import nixpkgs { inherit system; }; }
         )
       );
     };
