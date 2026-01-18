@@ -2,19 +2,27 @@
 
 pkgs.stdenv.mkDerivation {
   pname = "pterodactyl-wings";
-  version = "main";
+  version = "latest";
 
   src = pkgs.fetchFromGitHub {
     owner = "pterodactyl";
     repo = "wings";
     rev = "main";
-    sha256 = lib.fakeSha256;
+    sha256 = pkgs.lib.fakeSha256;
   };
 
-  buildInputs = [ pkgs.go ];
+  nativeBuildInputs = [ pkgs.go ];
+
+  buildPhase = ''
+    export GOPATH=$(pwd)/.gopath
+    mkdir -p $GOPATH/src/github.com/pterodactyl
+    cp -r * $GOPATH/src/github.com/pterodactyl/wings
+    cd $GOPATH/src/github.com/pterodactyl/wings
+    go build -o wings .
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    go build -o $out/bin/wings ./...
+    cp wings $out/bin/
   '';
 }

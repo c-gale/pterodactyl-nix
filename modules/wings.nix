@@ -1,24 +1,26 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
-  wingsDir = "/var/lib/pterodactyl/wings";
+  configPath = "/etc/pterodactyl/config.yml";
 in {
+
   options.services.pterodactyl.wings = {
-    enable = mkEnableOption "Pterodactyl Wings";
-    nodeFQDN = mkOption { type = types.str; default = ""; };
+    enable = lib.mkEnableOption "Pterodactyl Wings";
+    configYaml = lib.mkOption {
+      type = lib.types.str;
+      description = "Contents of wings config.yml generated from the panel UI.";
+    };
   };
 
-  config = mkIf config.services.pterodactyl.wings.enable ({
+  config = lib.mkIf config.services.pterodactyl.wings.enable ({
+    environment.etc."pterodactyl-wings-config".text = config.services.pterodactyl.wings.configYaml;
+
     environment.systemPackages = [ pkgs.wings ];
 
     systemd.services.wings = {
       enable = true;
-      serviceConfig = {
-        ExecStart = "${pkgs.wings}/bin/wings --config /etc/pterodactyl/wings.yml";
-        Restart = "on-failure";
-      };
+      serviceConfig.ExecStart = "${pkgs.wings}/bin/wings -c ${configPath}";
+      Restart = "on-failure";
     };
   });
 }
