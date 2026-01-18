@@ -32,7 +32,7 @@ in
         listen = "/run/php-fpm-pterodactyl.sock";
         # php_admin_value[error_log] = "/var/log/pterodactyl/php-fpm-error.log";
       };
-      phpEnv.PATH = lib.makeBinPath [ *pkgs.phpWithExtensions ];
+      phpEnv.PATH = lib.makeBinPath [ pkgs.phpWithExtensions ];
     };
 
     services.nginx = {
