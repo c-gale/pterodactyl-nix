@@ -1,65 +1,24 @@
-{ flake }:
-{ lib, config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
+
 let
-  cfg = config.services.wings;
-
-  flakePkgs = flake.outputs.packages.${pkgs.system};
-
-  wings = cfg.pkg;
+  wingsDir = "/var/lib/pterodactyl/wings";
 in {
-  options.services.wings = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
-
-    configuration = lib.mkOption {
-      type = lib.types.attrs;
-      default = {};
-    };
-
-    version = lib.mkOption {
-      type = lib.types.str;
-      default = "latest";
-    };
-
-    pkg = lib.lib.mkOption {
-      type = lib.types.package;
-      description = "The package to use for the pterodactyl wings daemon";
-      default = flakePkgs.wings;
-    };
+  options.services.pterodactyl.wings = {
+    enable = mkEnableOption "Pterodactyl Wings";
+    nodeFQDN = mkOption { type = types.str; default = ""; };
   };
 
-  config = lib.mkIf cfg.enable {
-    virtualisation.docker.enable = true;
+  config = mkIf config.services.pterodactyl.wings.enable ({
+    environment.systemPackages = [ pkgs.wings ];
 
     systemd.services.wings = {
-      enable = cfg.enable;
-      description = "Pterodactyl Wings daemon";
-
-      after = [ "docker.service" ];
-      partOf = [ "docker.service" ];
-      requires = [ "docker.service" ];
-
-      startLimitIntervalSec = 180;
-      startLimitBurst = 30;
-
+      enable = true;
       serviceConfig = {
-        User = "root";
-        # WorkingDirectory = "/run/wings";
-
-        LimitNOFILE = 4096;
-        PIDFile = "/var/run/wings/daemon.pid";
-
-        ExecStart = "${cfg.pkg}/bin/wings --config ${pkgs.writeText "config.yaml" (lib.strings.toJSON cfg.configuration)}";
-
+        ExecStart = "${pkgs.wings}/bin/wings --config /etc/pterodactyl/wings.yml";
         Restart = "on-failure";
-        RestartSec = "5s";
       };
-
-      wantedBy = [ "multi-user.target" ];
     };
-  };
+  });
 }

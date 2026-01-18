@@ -1,20 +1,19 @@
 { pkgs }:
 
 pkgs.stdenv.mkDerivation {
-  pname = "pterodactyl-wings";
+  pname = "pterodactyl-panel";
   version = "main";
 
   src = pkgs.fetchFromGitHub {
     owner = "pterodactyl";
-    repo = "wings";
+    repo = "panel";
     rev = "main";
     sha256 = lib.fakeSha256;
   };
 
-  buildInputs = [ pkgs.go ];
-
+  buildPhase = "true";
   installPhase = ''
-    mkdir -p $out/bin
-    go build -o $out/bin/wings ./...
+    mkdir -p $out
+    cp -r * $out/
   '';
 }
