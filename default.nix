@@ -19,7 +19,6 @@ pkgs.stdenv.mkDerivation rec {
   ];
 
   buildInputs = with pkgs; [
-
     php
     phpPackages.cli
     phpPackages.openssl
