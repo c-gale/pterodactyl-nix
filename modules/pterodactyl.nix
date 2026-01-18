@@ -89,7 +89,7 @@ in {
     services.nginx = lib.mkIf cfg.proxy.enable {
       enable = true;
 
-      virtualHosts."${cfg.serverName}" = {
+      virtualHosts."${cfg.proxy.serverName}" = {
         root = "${config.services.pterodactyl.pkg}/public";
 
         extraConfig = ''
