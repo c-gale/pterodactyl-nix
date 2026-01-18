@@ -25,7 +25,6 @@ in
     environment.systemPackages = [ pteroPkg ];
 
     # Ensure php-fpm and nginx are enabled
-    services.phpfpm.enable = true;
     services.phpfpm.pools."pterodactyl" = {
       user = "ptero";
       settings = {
