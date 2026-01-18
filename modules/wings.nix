@@ -19,8 +19,16 @@ in {
 
     systemd.services.wings = {
       enable = true;
-      serviceConfig.ExecStart = "${pkgs.wings}/bin/wings -c ${configPath}";
-      Restart = "on-failure";
+      wants = [ "docker.service" ];
+      after = [ "docker.service" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.wings}/bin/wings -c /etc/pterodactyl/config.yml";
+        Restart = "on-failure";
+        RestartSec = "5s";
+        Type = "simple";
+      };
+      install.wantedBy = [ "multi-user.target" ];
     };
+
   });
 }
