@@ -153,7 +153,7 @@ in {
       serviceConfig = {
         User = cfg.user;
         Group = cfg.user;
-        Restart = "always";
+        Restart = "on-failure";
         ExecStart =
           "${flakePkgs.php}/bin/php ${cfg.pkg}/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3";
         StartLimitBurst = 30;
