@@ -12,7 +12,7 @@
 
     packages = nixpkgs.lib.genAttrs [ "x86_64-linux" ] (
       system: nixpkgs.lib.genAttrs [ "pterodactyl" ] (
-        package: import ./packages/${package}.nix { pkgs = import nixpkgs { inherit system; }; }
+        package: import ./packages/${package}.nix { pkgs = import nixpkgs { inherit system; }; lib }
       )
     );
   };
