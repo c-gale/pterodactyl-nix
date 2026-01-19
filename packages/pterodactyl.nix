@@ -8,7 +8,7 @@ pkgs.stdenv.mkDerivation rec {
     owner = "pterodactyl";
     repo = "panel";
     rev = "v${version}";
-    sha256 = "AA";
+    sha256 = "sha256-8DthHZqlNisNeYGVM0Hsxa0ml4sfoM3v5fqAPhNZCrU=";
   };
 
   nativeBuildInputs = with pkgs; [
