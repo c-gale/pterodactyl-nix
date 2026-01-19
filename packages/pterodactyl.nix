@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> {} lib }:
 
 pkgs.stdenv.mkDerivation rec {
   pname = "pterodactyl-panel";
