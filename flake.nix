@@ -5,14 +5,14 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = { self, nixpkgs, lib }: {
+  outputs = { self, nixpkgs }: {
     nixosModules = nixpkgs.lib.genAttrs [ "pterodactyl" ] (
       module: import ./modules/${module}.nix { flake = self; }
     );
 
     packages = nixpkgs.lib.genAttrs [ "x86_64-linux" ] (
       system: nixpkgs.lib.genAttrs [ "pterodactyl" ] (
-        package: import ./packages/${package}.nix { pkgs = import nixpkgs { inherit system; }; lib = import lib; }
+        package: import ./packages/${package}.nix { pkgs = import nixpkgs { inherit system; }; }
       )
     );
   };

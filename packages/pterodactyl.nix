@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} lib }:
+{ pkgs ? import <nixpkgs> {} }:
 
 pkgs.stdenv.mkDerivation rec {
   pname = "pterodactyl-panel";
@@ -8,7 +8,7 @@ pkgs.stdenv.mkDerivation rec {
     owner = "pterodactyl";
     repo = "panel";
     rev = "v${version}";
-    sha256 = lib.fakeSha256;
+    sha256 = "AA";
   };
 
   nativeBuildInputs = with pkgs; [
