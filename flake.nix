@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self, nixpkgs, lib }: {
     nixosModules = nixpkgs.lib.genAttrs [ "pterodactyl" ] (
       module: import ./modules/${module}.nix { flake = self; }
     );
