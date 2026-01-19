@@ -20,18 +20,7 @@ pkgs.stdenv.mkDerivation rec {
 
   buildInputs = with pkgs; [
     php
-    phpPackages.cli
-    phpPackages.openssl
-    phpPackages.gd
-    phpPackages.mysql
-    phpPackages.pdo
-    phpPackages.mbstring
-    phpPackages.tokenizer
-    phpPackages.bcmath
-    phpPackages.xml
-    phpPackages.curl
-    phpPackages.zip
-    phpPackages.fpm
+    openssl
   ];
 
   buildPhase = ''
